@@ -1,0 +1,178 @@
+# .env file to set up my PROJECT scriptcase environment
+
+#
+# Compose default project env variables
+#
+COMPOSE_PROJECT_NAME=project1
+
+#
+# Network name
+#
+# The container app must use a network connected to webproxy
+#
+NETWORK=webproxy
+
+###################################################################
+# Database Container options                                      #
+##################################################################
+# [IMPORTANT] We recommend to always set a version when starting a new site.
+# When migrating or restoring a backup you must know the running version
+
+# Container specific in this case bitnami/mysql
+# Database image mysql
+DB_IMAGE=bitnami/mysql
+# Database version 
+DB_IMAGE_VERSION=5.7.29
+# Debug on for bitnami
+BITNAMI_DEBUG=true
+# data files mysql on bitnami
+BITNAMI_MYSQL_DATA=/bitnami/mysql/data
+# export files mysql on bitnami
+BITNAMI_MYSQL_EXPORT_DIR=/bitnami/mysql/export
+# Configuration file mysql on bitnami
+BITNAMI_MYSQL_CONF_FILE=/opt/bitnami/mysql/conf/my_custom.cnf
+# User and group of processes in mysql bitnami
+BITNAMI_MYSQL_USER=1001
+BITNAMI_MYSQL_GROUP=1001
+
+# Database container name
+CONTAINER_DB_NAME=mysql-project
+# DB container ipv address
+CONTAINER_DB_PROJECT_IPV4=172.20.0.10
+# DB container port
+CONTAINER_DB_PROJECT_PORT=3306
+
+# Path to store database files on hostsystem
+DB_DIR=./db_project
+# Path to store database configuration files on hostsystem
+DB_CONF_FILE=./mysql_conf/my_custom.cnf
+
+# Root password for database pls change
+MYSQL_ROOT_USER=root
+MYSQL_ROOT_PASSWORD=changeme
+
+# Database name project2 , user and password for application 
+# pls changeme
+MYSQL_DATABASE=securityexample
+MYSQL_USER=admin
+# pls change
+MYSQL_PASSWORD=changeme2
+
+###################################################################
+# NGINX Project1 Site Container options                                    #
+###################################################################
+
+# NGINX Site Image
+NGINX_PROJECT_IMAGE=bitnami/nginx
+# NGINX Site Version
+NGINX_PROJECT_IMAGE_VERSION=1.21.4-debian-10-r18
+
+# Configuration files nginx on bitnami
+BITNAMI_NGINX_CONF_PROJECT_FILE=/opt/bitnami/nginx/conf/server_blocks/myapp.conf
+
+# Nginx Site container name
+CONTAINER_NGINX_PROJECT_NAME=nginx-project2
+
+# Nginx project2 container port 
+# if you change this port also change in nginx_conf/project2/vhost/myapp_project2.conf
+CONTAINER_NGINX_PROJECT_PORT=6080
+
+# Nginx container ipv address
+CONTAINER_NGINX_PROJECT_IPV4=172.20.0.21
+
+# Path to store nginx configuration files on hostsystem
+NGINX_CONF_PROJECT_FILE=./nginx_conf/project2/vhost/myapp_project2.conf
+
+# Path to store nginx log files on hostsystem
+NGINX_LOGS_PROJECT_FILE=./nginx_log/project2
+
+# Max Log File Size
+LOGGING_NGINX_OPTIONS_MAX_SIZE=100m
+
+# Your project2 domain (or domains)
+MAIN_DOMAIN_PROJECT=project2.changeme.com
+
+# SSL Path to the certificates
+NGINX_PROJECT_SSL_PATH=../nginx-proxy/nginx-data/certs
+
+###################################################################
+# PHP General Container options                                   #
+###################################################################
+# Path to store php files on bitnami
+BITNAMI_PHP_APP_DIR=/app
+
+###################################################################
+# PHP Project1 Container options                                  #
+###################################################################
+#Path to store php files on hostsystem
+PHP_APP_PROJECT_DIR=./app/project2
+
+# PHP Project1 Image
+PHP_PROJECT_IMAGE=bitnami/php-fpm
+# PHP Site Version
+#PHP_PROJECT_IMAGE_VERSION=7.0.14-r1 #old version
+PHP_PROJECT_IMAGE_VERSION=7.3.12-r21
+# php project2 version 
+PHP_PROJECT_VERSION=7.3
+
+
+# Configuration files php on bitnami
+BITNAMI_PHP_CONF_FILE=/phpconf/custom.ini
+# Path to scan php configuration files on bitnami
+BITNAMI_PHP_INI_SCAN_DIR=/phpconf
+# Path to extra php extension files on bitnami
+BITNAMI_PHP_EXT_DIR=/phpext
+# Path to project2 php ini file on bitnami
+BITNAMI_PHP_INI_DIR=/opt/bitnami/php/etc
+# user and group of processes in php-fpm bitnam 
+BITNAMI_PHP_USER=1
+BITNAMI_PHP_GROUP=1
+
+
+# Path to store php php.ini configuration file on the hostsystem
+PHP_INI_PROJECT_DIR=./php_conf/project2
+# Path to store php custom ini configuration file with additions to php.ini on the hostsystem
+PHP_CONF_PROJECT_FILE=./php_conf/project2/iniscan/custom.ini
+# Path to store php extension files on hostsystem
+PHP_EXT_PROJECT_DIR=./php_conf/project2/phpext
+
+# Phpfpm container name
+CONTAINER_PHPFPM_PROJECT_NAME=php-fpm-project2
+# phpfpm container ipv address
+CONTAINER_PHPFPM_PROJECT_IPV4=172.20.0.22
+CONTAINER_PHP_PROJECT_PORT=9100
+
+# Max Log File Size
+LOGGING_PHPFPM_OPTIONS_MAX_SIZE=100m
+
+###################################################################
+# PHPMYADMIN Project Container options                            #
+###################################################################
+
+# PHPmyadmin  Image
+PHPMYADMIN_IMAGE=phpmyadmin/phpmyadmin
+# PHP Site Version
+PHPMYADMIN_IMAGE_VERSION=5.1.1
+
+# Phpmyadmin container name
+CONTAINER_PHPMYADMIN_NAME=phpmyadmin
+# Phpmyadmin container ipv address
+CONTAINER_PHPMYADMIN_IPV4=172.20.0.7
+CONTAINER_PHPMYADMIN_PORT=9001
+
+###################################################################
+# Loose settings 
+###################################################################
+
+# Your email for Let's Encrypt register pls change
+LETSENCRYPT_EMAIL=changeme@domain.com
+
+# pure ftpd dir where updates are placed
+PUREFTPD_DIR=../pure-ftpd
+PUREFTPD_DATA_DIR=../pure-ftpd/data
+
+# location of scriptcase libraries and production environment
+SCRIPTCASE_PRODLIB=_lib
+
+# location of scriptcase libraries and production environment
+$DEPLOY_INTERVAL_SEC=10

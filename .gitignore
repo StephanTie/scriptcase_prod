@@ -1,0 +1,12 @@
+.env
+.env2
+app
+app_install/project1/history
+app_install/project2/history
+nginx_conf/project1
+!nginx_conf/project1/vhost/myapp_project1.conf
+nginx_conf/project2
+!nginx_conf/project2/vhost/myapp_project2.conf
+php_conf/project1/phpext/*
+php_conf/project2/phpext/*
+pma_conf

@@ -1,0 +1,2 @@
+*.prod*.gz filter=lfs diff=lfs merge=lfs -text
+*prod*.gz filter=lfs diff=lfs merge=lfs -text

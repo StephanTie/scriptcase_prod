@@ -1,0 +1,87 @@
+version: '3'
+services:
+  mysql-project:
+    container_name: ${CONTAINER_DB_NAME:-mysql-project}
+    image: ${DB_IMAGE}:${DB_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE?err}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD?err}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD?err}
+      - MYSQL_USER=${MYSQL_USER?err}
+      - BITNAMI_DEBUG=true
+    volumes:
+      - ${DB_DIR}:${BITNAMI_MYSQL_DATA}
+      - ${DB_CONF_FILE}:${BITNAMI_MYSQL_CONF_FILE}:ro
+      - ${DB_EXPORT_CSV_DIR}:${BITNAMI_MYSQL_EXPORT_DIR}
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_DB_PROJECT_IPV4}
+    expose:
+      - ${CONTAINER_DB_PROJECT_PORT:-3306}
+    logging:
+      options:
+        max-size: ${LOGGING_MYSQL_OPTIONS_MAX_SIZE:-100m}
+  nginx-project2:
+    container_name: ${CONTAINER_NGINX_PROJECT_NAME}
+    image: ${NGINX_PROJECT_IMAGE}:${NGINX_PROJECT_IMAGE_VERSION}
+    user: root
+    hostname: "nginx-project2"
+    depends_on:
+      - php-fpm-project1
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_NGINX_PROJECT_IPV4}
+    ports:
+      - ${CONTAINER_NGINX_PROJECT_PORT:-6080}:8080
+    expose:
+      -  ${CONTAINER_NGINX_PROJECT_PORT:-8080}
+    dns: 8.8.8.8
+    volumes:
+      - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
+      - ${NGINX_CONF_PROJECT_FILE}:${BITNAMI_NGINX_CONF_PROJECT_FILE}:ro
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${NGINX_LOGS_PROJECT_FILE}:/opt/bitnami/nginx/logs
+    environment:
+      - BITNAMI_DEBUG=true
+      - VIRTUAL_HOST=${MAIN_DOMAIN_PROJECT}
+      - VIRTUAL_PORT=${CONTAINER_NGINX_PROJECT_PORT:-6080}
+      - LETSENCRYPT_HOST=${MAIN_DOMAIN_PROJECT}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    logging:
+      options:
+        max-size: ${LOGGING_NGINX_OPTIONS_MAX_SIZE:-100m}
+  php-fpm-project2:
+    container_name: ${CONTAINER_PHPFPM_PROJECT_NAME}
+    image: ${PHP_PROJECT_IMAGE}:${PHP_PROJECT_IMAGE_VERSION}
+    hostname: "php-fpm-project2"
+    depends_on:
+       - mysql-project
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_PHPFPM_PROJECT_IPV4}
+    ports:
+      - ${CONTAINER_PHP_PROJECT2_PORT:-9100}:9000
+    volumes:
+      - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
+      - ${PHP_CONF_PROJECT_FILE}:${BITNAMI_PHP_CONF_FILE}:ro
+      - ${PHP_EXT_PROJECT_DIR}:${BITNAMI_PHP_EXT_DIR}:ro
+      - ${PHP_INI_PROJECT_DIR}/php.ini:${BITNAMI_PHP_INI_DIR}/php.ini
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PHP_INI_SCAN_DIR=${BITNAMI_PHP_INI_SCAN_DIR}
+      - RUN_SCRIPTS=1
+      - REAL_IP_HEADER=1
+      - ERRORS=1
+      - BITNAMI_DEBUG=true
+    logging:
+      options:
+        max-size: ${LOGGING_PHP_OPTIONS_MAX_SIZE:-100m}
+networks:
+  proxy:
+    external:
+      name: ${NETWORK}
+
