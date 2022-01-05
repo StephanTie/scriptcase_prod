@@ -20,6 +20,9 @@ Starting point: Ensure versions are equal or higher for:
 
 Ensure your production environment is safe and hardened otherwise  you get your data exposed. (ufw is up, fail2ban, sudo and no root users, ssh only with key and many other safety precautions steps you should  be familiar with)
 
+With having this docker environment set up it is very easy to spin up an new copy of an environment and set up a stage environment.
+Also new versions of scriptcase with new versions of php , nginx and mysql can be far more easily installed and tested.
+
 **Steps**
 Step 1 - Precautions for automatic iptable changes by docker.
 When using docker first of all you do not want starting containers automatically opening ports and change the iptables. Also added standard dns.
