@@ -67,24 +67,32 @@ Start automatic update process  (change /data/docker to your directory where you
 - screen -dmS PUBLISH_SCRIPTCASE  /data/docker/scriptcase_prod/publish_scriptcase.sh
 
 2. Wkhtmltopdf and scriptcase 
-This container and the script can also be used and can be accessed via curl
+This container and the script can also be used on its own and can be accessed via curl
 Settings can be defined in a seperate file per report in the /pdf_ini location.  Copy the example grid_customers_pdf.ini.example (without .example) to this directory
 And check if the report is using the other settings
   
-Remarks:
-If you encounter problems most of the time it is related with the proper rights although the scripts changes them correctly.
+**Remarks:**
+If you encounter problems most of the time it is related with not having the proper rights although the scripts changes them correctly.
 
-Commands:
+
+**Commands:**
 docker-compose up -d        : starts up project1
+
 docker-compose build        : Creating docker specific docker images for project1
+
 docker-compose down        : Stops project1
      
 docker-compose -f dc_project2 --env_file .env2 up -d : starts up project2
 docker-compose -f dc_project2 --env_file .env2 build : Creating docker specific docker images for project1
 docker-compose -f dc_project2 --env_file .env2 down  : stops project2
 
-screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh:  Checks if files are placed in app_install or mysql_install folder and updates the projects automatically
-    
+screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh 1:  Checks if files are placed in app_install/project1 or mysql_install or ../pure-ftpd/data/scriptcase/project1 dir and updates the projects automatically
+screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh 2:  Checks if files are placed in app_install/project2 or ../pure-ftpd/data/scriptcase/project2 dir
+
+Checking if wkhtmltopdf works:
+curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["Hello","Letter","--orientation","Portrait","--header-right","[page]", http://wkhtmltopdf-project2:4000/commands/hello?wait=true&force_unique_key=true   and curl -v -H http://wkhtmltopdf-project2:4000/commands/wkhtmltopdf?key=<fill in key received>    
+
+curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["--page-size","Letter","--orientation","Portrait","--header-right","[page]","/app/_lib/tmp/sc_grid_customers_html_srohjjdvj89f8r2148nm22damc.html","/app/_lib/tmp/sc_pdf_06a6822b6a707fe23a99808a1df15641_grid_customers.pdf"]}' http://wkhtmltopdf-project2:4000/commands/wkhtmltopdf?wait=true&force_unique_key=true   
     
 Projectstructure:
 ── app
@@ -141,3 +149,7 @@ Projectstructure:
 │       └── phpext
 └── pma_conf
     └── sessions
+
+ **   Special Thanks to:**
+    Eshaan Bansal for his contribution on github eshaan7/Flask-Shell2HTTP
+    To many others who share their knowledge on github and stackoverflow 
