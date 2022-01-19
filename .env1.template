@@ -38,7 +38,7 @@ BITNAMI_MYSQL_GROUP=1001
 # Database container name
 CONTAINER_DB_NAME=mysql-project
 # DB container ipv address
-CONTAINER_DB_PROJECT_IPV4=172.20.0.3
+CONTAINER_DB_PROJECT_IPV4=172.20.0.10
 # DB container port
 CONTAINER_DB_PROJECT_PORT=3306
 
@@ -78,7 +78,7 @@ CONTAINER_NGINX_PROJECT_NAME=nginx-project1
 CONTAINER_NGINX_PROJECT_PORT=8080
 
 # Nginx container ipv address
-CONTAINER_NGINX_PROJECT_IPV4=172.20.0.4
+CONTAINER_NGINX_PROJECT_IPV4=172.20.0.11
 
 # Path to store nginx configuration files on hostsystem
 NGINX_CONF_PROJECT_FILE=./nginx_conf/project1/vhost/myapp_project1.conf
@@ -141,8 +141,9 @@ PHP_EXT_PROJECT_DIR=./php_conf/project1/phpext
 # Phpfpm container name
 CONTAINER_PHPFPM_PROJECT_NAME=php-fpm-project1
 # phpfpm container ipv address
-CONTAINER_PHPFPM_PROJECT_IPV4=172.20.0.5
-CONTAINER_PHP_PROJECT_PORT=9000
+CONTAINER_PHPFPM_PROJECT_IPV4=172.20.0.12
+CONTAINER_PHPFPM_PROJECT_PORT=9000
+CONTAINER_PHPFPM_PROJECT_INTERNAL_PORT=9000
 
 # Max Log File Size
 LOGGING_PHPFPM_OPTIONS_MAX_SIZE=100m
@@ -160,7 +161,7 @@ PHPMYADMIN_IMAGE_VERSION=5.1.1
 # Phpmyadmin container name
 CONTAINER_PHPMYADMIN_NAME=phpmyadmin
 # Phpmyadmin container ipv address
-CONTAINER_PHPMYADMIN_IPV4=172.20.0.6
+CONTAINER_PHPMYADMIN_IPV4=172.20.0.7
 CONTAINER_PHPMYADMIN_PORT=9001
 
 ###################################################################
@@ -174,10 +175,10 @@ WKHTMLTOPDF_IMAGE=surnet/alpine-python-wkhtmltopdf
 # wkhtmltopdf Version
 WKHTMLTOPDF_IMAGE_VERSION=3.9.9-0.12.6-full
 
-# Phpmyadmin container name
-CONTAINER_WKHTMLTOPDF_NAME=wkhtmltopdf
-# Phpmyadmin container ipv address
-CONTAINER_WKHTMLTOPDF_IPV4=172.20.0.7
+# wkhtmltopdf container name
+CONTAINER_WKHTMLTOPDF_NAME=wkhtmltopdf1
+# wkhtmltopdf container ipv4 address
+CONTAINER_WKHTMLTOPDF_IPV4=172.20.0.3
 CONTAINER_WKHTMLTOPDF_PORT=4000
 CONTAINER_WKHTMLTOPDF_INTERNAL_PORT=4000
 
@@ -195,6 +196,8 @@ PUREFTPD_DATA_DIR=../pure-ftpd/data
 
 # location of scriptcase libraries and production environment
 SCRIPTCASE_PRODLIB=_lib
+# wkhtmltopdf shell scripts location (dir + file) without SCRIPTCASE_PRODLIB and / 
+SCRIPTCASE_WKHTMLTOPDF_SCRIPT=prod/third/wkhtmltopdf/linux-amd64/wkhtmltopdf-amd64
 # Startup scriptcase application
 SCRIPTCASE_STARTAPP=app_Login
 # deploy check interval
