@@ -74,3 +74,70 @@ And check if the report is using the other settings
 Remarks:
 If you encounter problems most of the time it is related with the proper rights although the scripts changes them correctly.
 
+Commands:
+docker-compose up -d        : starts up project1
+docker-compose build        : Creating docker specific docker images for project1
+docker-compose down        : Stops project1
+     
+docker-compose -f dc_project2 --env_file .env2 up -d : starts up project2
+docker-compose -f dc_project2 --env_file .env2 build : Creating docker specific docker images for project1
+docker-compose -f dc_project2 --env_file .env2 down  : stops project2
+
+screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh:  Checks if files are placed in app_install or mysql_install folder and updates the projects automatically
+    
+    
+Projectstructure:
+── app
+│   ├── project1
+│   │   ├── grid_customers
+│   │   ├── history
+│   │   ├── _lib
+│   │   │   └── tmp
+│   │   └── pdf_ini
+│   └── project2
+│       ├── grid_customers
+│       ├── history
+│       ├── _lib
+│       │   └── tmp
+│       └── pdf_ini
+├── app_install
+│   ├── project1
+│   │   └── history
+│   └── project2
+│       └── history
+├── db_project
+│   ├── mysql
+│   ├── performance_schema
+│   ├── securityexample
+│   └── sys
+├── dockerfiles
+│   ├── Flask-Shell2HTTP
+│   │   ├── conf
+│   │   ├── docs
+│   │   │   └── source
+│   │   ├── examples
+│   │   ├── flask_shell2http
+│   │   └── tests
+│   ├── project1
+│   └── project2
+├── mysql_conf
+├── mysql_install
+│   └── history
+├── nginx_conf
+│   ├── project1
+│   │   └── vhost
+│   └── project2
+│       ├── log
+│       └── vhost
+├── nginx_log
+│   ├── project1
+│   └── project2
+├── php_conf
+│   ├── project1
+│   │   ├── iniscan
+│   │   └── phpext
+│   └── project2
+│       ├── iniscan
+│       └── phpext
+└── pma_conf
+    └── sessions
