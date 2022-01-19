@@ -1,0 +1,9 @@
+ARG IMAGE
+ARG TAG
+ARG PORT
+
+FROM $IMAGE:$TAG
+RUN apt-get update && apt-get -y install curl 
+
+EXPOSE $PORT
+
