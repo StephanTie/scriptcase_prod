@@ -5,6 +5,7 @@ Docker-compose scriptcase php-apps in nginx, mysql, phpmyadmin and phhp-fpm in p
 
 
 **How to install Scriptcase generated php applications on docker with nginx-proxy using nginx and mysql with ssl access **
+** Additional solved the portability issue with wkhtmltopdf by generating a container for it                            **
 date: 15–11–2021
 
 **Introduction**
@@ -39,8 +40,9 @@ Step 3 - Ensure you have an A record pointing to your server
 project1.domain.com -> 111.222.333.444
 
 Step 4 - Copy .env.template to .env and change the .env file
-cp .env.template .env
-edit .env file and change all the items that have a mark changeme.
+
+cp .env1.template .env
+edit .env file and change all the items that have a mark <changeme> and <domain.com>.
 Do not change the other settings. Do this later after the first initial run works
 
 Step 5 Run install for project1
@@ -48,8 +50,10 @@ sudo firststeponly.sh 1
 
 Step 6 Configure Scriptcase production Go to https://project1.domain.com/_lib/prod
 - Login with scriptcase and set new password 
+- edit pdf server in production settings to /app
 - edit database connection option conn_example and change Server/Host to mysql-project and save
 ![afbeelding](https://user-images.githubusercontent.com/8845918/147996147-8448611b-33e6-4878-b6f8-8b304a215315.png)
+- Leave your browser and startup again to check if your settings were saved
 - Now you can browse to https://project1.<domain.com>   for which you fil in your domain
 
 ** Special options  **
@@ -57,4 +61,5 @@ Step 6 Configure Scriptcase production Go to https://project1.domain.com/_lib/pr
 Start automatic update process  (change /data/docker to your directory where your project reside)
 - screen -dmS PUBLISH_SCRIPTCASE  /data/docker/scriptcase_prod/publish_scriptcase.sh
 
-
+2. Starting the second project with connection to the same database with ./firststeponly 2
+  
