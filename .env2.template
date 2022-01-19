@@ -3,7 +3,7 @@
 #
 # Compose default project env variables
 #
-COMPOSE_PROJECT_NAME=project1
+COMPOSE_PROJECT_NAME=project2
 
 #
 # Network name
@@ -173,6 +173,7 @@ PUREFTPD_DATA_DIR=../pure-ftpd/data
 
 # location of scriptcase libraries and production environment
 SCRIPTCASE_PRODLIB=_lib
-
 # location of scriptcase libraries and production environment
-$DEPLOY_INTERVAL_SEC=10
+SCRIPTCASE_STARTAPP=app_Login
+# deploy check interval
+DEPLOY_INTERVAL_SEC=10

@@ -38,24 +38,25 @@ BITNAMI_MYSQL_GROUP=1001
 # Database container name
 CONTAINER_DB_NAME=mysql-project
 # DB container ipv address
-CONTAINER_DB_PROJECT_IPV4=172.20.0.10
+CONTAINER_DB_PROJECT_IPV4=172.20.0.3
 # DB container port
 CONTAINER_DB_PROJECT_PORT=3306
 
 # Path to store database files on hostsystem
 DB_DIR=./db_project
+# Path to export database files in csv on hostsystem
+DB_EXPORT_CSV_DIR=./exportcsv
 # Path to store database configuration files on hostsystem
 DB_CONF_FILE=./mysql_conf/my_custom.cnf
 
-# Root password for database pls change
+# Root password for database
 MYSQL_ROOT_USER=root
-MYSQL_ROOT_PASSWORD=changeme
+MYSQL_ROOT_PASSWORD=<changeme>
 
-# Database name, user and password for application 
+# Database name, user and password for application
 MYSQL_DATABASE=securityexample
 MYSQL_USER=admin
-# pls change
-MYSQL_PASSWORD=changeme2
+MYSQL_PASSWORD=<changeme2>
 
 ###################################################################
 # NGINX Project1 Site Container options                                    #
@@ -77,7 +78,7 @@ CONTAINER_NGINX_PROJECT_NAME=nginx-project1
 CONTAINER_NGINX_PROJECT_PORT=8080
 
 # Nginx container ipv address
-CONTAINER_NGINX_PROJECT_IPV4=172.20.0.11
+CONTAINER_NGINX_PROJECT_IPV4=172.20.0.4
 
 # Path to store nginx configuration files on hostsystem
 NGINX_CONF_PROJECT_FILE=./nginx_conf/project1/vhost/myapp_project1.conf
@@ -89,7 +90,7 @@ NGINX_LOGS_PROJECT_FILE=./nginx_log/project1
 LOGGING_NGINX_OPTIONS_MAX_SIZE=100m
 
 # Your project1 domain (or domains)
-MAIN_DOMAIN_PROJECT=project1.changeme.com
+MAIN_DOMAIN_PROJECT=project1.<domain.com>
 
 # SSL Path to the certificates
 NGINX_PROJECT_SSL_PATH=../nginx-proxy/nginx-data/certs
@@ -106,7 +107,9 @@ BITNAMI_PHP_APP_DIR=/app
 #Path to store php files on hostsystem
 PHP_APP_PROJECT_DIR=./app/project1
 
-# PHP Project1 Image
+# PHP Project1 Dockerfile
+PHP_PROJECT_DOCKERFILE=./dockerfiles/project1/Dockerfile-php-fpm
+# PHP Project1 Base Image
 PHP_PROJECT_IMAGE=bitnami/php-fpm
 # PHP Site Version
 #PHP_PROJECT_IMAGE_VERSION=7.0.14-r1 #old version
@@ -138,11 +141,12 @@ PHP_EXT_PROJECT_DIR=./php_conf/project1/phpext
 # Phpfpm container name
 CONTAINER_PHPFPM_PROJECT_NAME=php-fpm-project1
 # phpfpm container ipv address
-CONTAINER_PHPFPM_PROJECT_IPV4=172.20.0.12
+CONTAINER_PHPFPM_PROJECT_IPV4=172.20.0.5
 CONTAINER_PHP_PROJECT_PORT=9000
 
 # Max Log File Size
 LOGGING_PHPFPM_OPTIONS_MAX_SIZE=100m
+
 
 ###################################################################
 # PHPMYADMIN Project Container options                            #
@@ -156,22 +160,42 @@ PHPMYADMIN_IMAGE_VERSION=5.1.1
 # Phpmyadmin container name
 CONTAINER_PHPMYADMIN_NAME=phpmyadmin
 # Phpmyadmin container ipv address
-CONTAINER_PHPMYADMIN_IPV4=172.20.0.7
+CONTAINER_PHPMYADMIN_IPV4=172.20.0.6
 CONTAINER_PHPMYADMIN_PORT=9001
+
+###################################################################
+# WKHTMLTOPDF Container options                                   #
+###################################################################
+
+# wkhtmltopdf Dockerfile
+WKHTMLTOPDF_DOCKERFILESDIR=./dockerfiles/Flask-Shell2HTTP
+# wkhtmltopdf Image
+WKHTMLTOPDF_IMAGE=surnet/alpine-python-wkhtmltopdf
+# wkhtmltopdf Version
+WKHTMLTOPDF_IMAGE_VERSION=3.9.9-0.12.6-full
+
+# Phpmyadmin container name
+CONTAINER_WKHTMLTOPDF_NAME=wkhtmltopdf
+# Phpmyadmin container ipv address
+CONTAINER_WKHTMLTOPDF_IPV4=172.20.0.7
+CONTAINER_WKHTMLTOPDF_PORT=4000
+CONTAINER_WKHTMLTOPDF_INTERNAL_PORT=4000
 
 ###################################################################
 # Loose settings 
 ###################################################################
 
-# Your email for Let's Encrypt register pls change
-LETSENCRYPT_EMAIL=changeme@domain.com
+# Your email for Let's Encrypt register
+LETSENCRYPT_EMAIL=admin@<domain.com>
 
 # pure ftpd dir where updates are placed
 PUREFTPD_DIR=../pure-ftpd
 PUREFTPD_DATA_DIR=../pure-ftpd/data
 
-# location of scriptcase libraries and production environment
-SCRIPTCASE_PRODLIB=_lib
 
 # location of scriptcase libraries and production environment
-$DEPLOY_INTERVAL_SEC=10
+SCRIPTCASE_PRODLIB=_lib
+# Startup scriptcase application
+SCRIPTCASE_STARTAPP=app_Login
+# deploy check interval
+DEPLOY_INTERVAL_SEC=10

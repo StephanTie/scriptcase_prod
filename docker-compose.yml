@@ -3,7 +3,7 @@ services:
   mysql-project:
     container_name: ${CONTAINER_DB_NAME:-mysql-project}
     image: ${DB_IMAGE}:${DB_IMAGE_VERSION:-latest}
-    restart: unless-stopped
+    restart: "unless-stopped"
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE?err}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD?err}
@@ -13,7 +13,6 @@ services:
     volumes:
       - ${DB_DIR}:${BITNAMI_MYSQL_DATA}
       - ${DB_CONF_FILE}:${BITNAMI_MYSQL_CONF_FILE}:ro
-      - ${DB_EXPORT_CSV_DIR}:${BITNAMI_MYSQL_EXPORT_DIR}
     networks:
       proxy:
         ipv4_address: ${CONTAINER_DB_PROJECT_IPV4}
@@ -26,6 +25,7 @@ services:
     container_name: ${CONTAINER_NGINX_PROJECT_NAME}
     image: ${NGINX_PROJECT_IMAGE}:${NGINX_PROJECT_IMAGE_VERSION}
     user: root
+    restart: "unless-stopped"
     hostname: "nginx-project1"
     depends_on:
       - php-fpm-project1
@@ -55,7 +55,14 @@ services:
         max-size: ${LOGGING_NGINX_OPTIONS_MAX_SIZE:-100m}
   php-fpm-project1:
     container_name: ${CONTAINER_PHPFPM_PROJECT_NAME}
-    image: ${PHP_PROJECT_IMAGE}:${PHP_PROJECT_IMAGE_VERSION}
+#    image: ${PHP_PROJECT_IMAGE}:${PHP_PROJECT_IMAGE_VERSION}
+    build:
+      context: .
+      dockerfile: ${PHP_PROJECT_DOCKERFILE}
+      args:
+        IMAGE: ${PHP_PROJECT_IMAGE}
+        TAG: ${PHP_PROJECT_IMAGE_VERSION}
+    restart: "unless-stopped"
     hostname: "php-fpm-project1"
     depends_on:
        - mysql-project
@@ -78,6 +85,28 @@ services:
     logging:
       options:
         max-size: ${LOGGING_PHP_OPTIONS_MAX_SIZE:-100m}
+  wkhtmltopdf1:
+    container_name: ${CONTAINER_WKHTMLTOPDF_NAME:-wkhtmltopdf1}
+    build:
+      context:  ${WKHTMLTOPDF_DOCKERFILESDIR}
+      dockerfile: ./Dockerfile
+      args:
+        IMAGE: ${WKHTMLTOPDF_IMAGE}
+        TAG: ${WKHTMLTOPDF_IMAGE_VERSION}
+        PORT: ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT}
+    restart: "unless-stopped"
+    hostname: "wkhtmltopdf1"
+    ports:
+      - ${CONTAINER_WKHTMLTOPDF_PORT:-4000}:${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4000}
+    expose:
+      - ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4000}
+    volumes:
+      - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_WKHTMLTOPDF_IPV4}
   phpmyadmin:
     image: ${PHPMYADMIN_IMAGE}:${PHPMYADMIN_IMAGE_VERSION}
     container_name: ${CONTAINER_PHPMYADMIN_NAME}
@@ -91,6 +120,7 @@ services:
       - PMA_ARBITRARY=1    # connect to any db
     volumes:
     - ./pma_conf/sessions:/sessions
+
 networks:
   proxy:
     external:

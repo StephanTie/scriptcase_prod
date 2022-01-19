@@ -1,41 +1,20 @@
 version: '3'
 services:
-  mysql-project:
-    container_name: ${CONTAINER_DB_NAME:-mysql-project}
-    image: ${DB_IMAGE}:${DB_IMAGE_VERSION:-latest}
-    restart: unless-stopped
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE?err}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD?err}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD?err}
-      - MYSQL_USER=${MYSQL_USER?err}
-      - BITNAMI_DEBUG=true
-    volumes:
-      - ${DB_DIR}:${BITNAMI_MYSQL_DATA}
-      - ${DB_CONF_FILE}:${BITNAMI_MYSQL_CONF_FILE}:ro
-      - ${DB_EXPORT_CSV_DIR}:${BITNAMI_MYSQL_EXPORT_DIR}
-    networks:
-      proxy:
-        ipv4_address: ${CONTAINER_DB_PROJECT_IPV4}
-    expose:
-      - ${CONTAINER_DB_PROJECT_PORT:-3306}
-    logging:
-      options:
-        max-size: ${LOGGING_MYSQL_OPTIONS_MAX_SIZE:-100m}
   nginx-project2:
     container_name: ${CONTAINER_NGINX_PROJECT_NAME}
     image: ${NGINX_PROJECT_IMAGE}:${NGINX_PROJECT_IMAGE_VERSION}
     user: root
+    restart: "unless-stopped"
     hostname: "nginx-project2"
     depends_on:
-      - php-fpm-project1
+      - php-fpm-project2
     networks:
       proxy:
         ipv4_address: ${CONTAINER_NGINX_PROJECT_IPV4}
     ports:
-      - ${CONTAINER_NGINX_PROJECT_PORT:-6080}:8080
+      - ${CONTAINER_NGINX_PROJECT_PORT:-6080}:6080
     expose:
-      -  ${CONTAINER_NGINX_PROJECT_PORT:-8080}
+      -  ${CONTAINER_NGINX_PROJECT_PORT:-6080}
     dns: 8.8.8.8
     volumes:
       - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
@@ -55,15 +34,23 @@ services:
         max-size: ${LOGGING_NGINX_OPTIONS_MAX_SIZE:-100m}
   php-fpm-project2:
     container_name: ${CONTAINER_PHPFPM_PROJECT_NAME}
-    image: ${PHP_PROJECT_IMAGE}:${PHP_PROJECT_IMAGE_VERSION}
+#    image: ${PHP_PROJECT_IMAGE}:${PHP_PROJECT_IMAGE_VERSION}
+    build:
+      context: .
+      dockerfile: ${PHP_PROJECT_DOCKERFILE}
+      args:
+        IMAGE: ${PHP_PROJECT_IMAGE}
+        TAG: ${PHP_PROJECT_IMAGE_VERSION}
+        PORT: ${CONTAINER_PHPFPM_PROJECT_INTERNAL_PORT:-9000}
+    restart: "unless-stopped"
     hostname: "php-fpm-project2"
-    depends_on:
-       - mysql-project
     networks:
       proxy:
         ipv4_address: ${CONTAINER_PHPFPM_PROJECT_IPV4}
     ports:
-      - ${CONTAINER_PHP_PROJECT2_PORT:-9100}:9000
+      - ${CONTAINER_PHPFPM_PROJECT_PORT:-9002}:${CONTAINER_PHPFPM_PROJECT_INTERNAL_PORT:-9000}
+    expose:
+      - ${CONTAINER_PHPFPM_PROJECT_INTERNAL_PORT:-9000}
     volumes:
       - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
       - ${PHP_CONF_PROJECT_FILE}:${BITNAMI_PHP_CONF_FILE}:ro
@@ -80,6 +67,28 @@ services:
     logging:
       options:
         max-size: ${LOGGING_PHP_OPTIONS_MAX_SIZE:-100m}
+  wkhtmltopdf2:
+    container_name: ${CONTAINER_WKHTMLTOPDF_NAME:-wkhtmltopdf2}
+    build:
+      context:  ${WKHTMLTOPDF_DOCKERFILESDIR}
+      dockerfile: ./Dockerfile2
+      args:
+        IMAGE: ${WKHTMLTOPDF_IMAGE}
+        TAG: ${WKHTMLTOPDF_IMAGE_VERSION}
+        PORT: ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT}
+    restart: "unless-stopped"
+    hostname: "wkhtmltopdf2"
+    ports:
+      - ${CONTAINER_WKHTMLTOPDF_PORT:-4001}:${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4001}
+    expose:
+      - ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4001}
+    volumes:
+      - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_WKHTMLTOPDF_IPV4}
 networks:
   proxy:
     external:
