@@ -20,6 +20,9 @@ Starting point: Ensure versions are equal or higher for:
 
 Ensure your production environment is safe and hardened otherwise  you get your data exposed. (ufw is up, fail2ban, sudo and no root users, ssh only with key and many other safety precautions steps you should  be familiar with)
 
+With having this docker environment set up it is very easy to spin up an new copy of an environment and set up a stage environment.
+Also new versions of scriptcase with new versions of php , nginx and mysql can be far more easily installed and tested.
+
 **Steps**
 Step 1 - Precautions for automatic iptable changes by docker.
 When using docker first of all you do not want starting containers automatically opening ports and change the iptables. Also added standard dns.
@@ -45,7 +48,13 @@ sudo firststeponly.sh 1
 
 Step 6 Configure Scriptcase production Go to https://project1.domain.com/_lib/prod
 - Login with scriptcase and set new password 
-- edit database connection option conn_example
+- edit database connection option conn_example and change Server/Host to mysql-project and save
+![afbeelding](https://user-images.githubusercontent.com/8845918/147996147-8448611b-33e6-4878-b6f8-8b304a215315.png)
+- Now you can browse to https://project1.<domain.com>   for which you fil in your domain
 
 ** Special options  **
+1. Automatic updates in case updates are pushed to directory app_install/project{1..n} or directory mysql_install or with help of the pure-ftpd server (see project pureftpd)
+Start automatic update process  (change /data/docker to your directory where your project reside)
+- screen -dmS PUBLISH_SCRIPTCASE  /data/docker/scriptcase_prod/publish_scriptcase.sh
+
 
