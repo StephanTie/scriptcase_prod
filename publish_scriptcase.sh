@@ -5,9 +5,12 @@
 # Check is done firstly in ../pureftpd and if not exits in app_install/project[n] and mysql_install directories 
 # Author: Stephan Tiebosch
 #
+REALSCRIPT=`realpath -s $0`
+REALSCRIPTPATH=`dirname ${REALSCRIPT}`
+cd $REALSCRIPTPATH
 
 if [ "$1" == "-h" ]; then
-  echo "Usage $0 <no>"
+  echo "Usage $0 <no> <-d>"
   echo " <no> is project number coresponds to docker-compose.yml and .env (1) or dc_project<no> (2..n) and .env[n])"
   exit
 fi
@@ -26,47 +29,71 @@ fi
 FILE=${PUREFTPD_DIR}/.env
 if [ -f "$FILE" ]; then
   source $FILE
-  UPDATEDIR=${PUREFTPD_DATA_DIR}/${FTP_USER}/project${no}
+  UPDATE_DIR="./${PUREFTPD_DATA_DIR}/${FTP_USER}/project${no} app_install/project${no} mysql_install"
 else
-  UPDATEDIR=app_install/project${no} mysql_install 
+  UPDATE_DIR="./app_install/project${no} ./mysql_install" 
 fi
+
+echo "updatedir =" "${UPDATE_DIR}"
 
 
 function update_rights() {
   # correct rights and owner
-  for xd in `find $1 -type f`; do
-    chmod 644 $xd
+  if [ "$2" == "-x" ]; then   # not production
+    x="$1/$3"
+    if [ "$4" = "-n" ]; then
+      noex="true"
+    else
+      noex="false"
+    fi
+  else
+    x="__"
+    if [ "$2" = "-n" ]; then
+      noex="true"
+    else
+      noex="false"
+    fi
+  fi
+IFS='
+' # split on newline only
+  for xd in `find $1 -type d ! -path "$x"`; do
+    if [ "$noex" = "true" ]; then
+      echo $xd
+    else
+      chmod 755 "$xd"
+    fi 
   done
-  for xd in `find $1 -type d`; do
-    chmod 755 $xd
+  for xd in `find $1 -type f ! -path "$x"`; do
+    if [ "$noex" = "true" ]; then
+      echo $xd
+    else
+      chmod 644 "$xd"
+    fi 
   done
   chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP} ./app/${project} -R
 }
 
-
-
-function publish_app() {
-  for dir in `find $1 -type d`; do
-  echo $dir
+publish_app() {
+  for dir in `find $@ -maxdepth 0 -type d`; do
      project=${dir##*/}
-echo $project
       for file in `find $dir -maxdepth 1 -type f`; do
-echo $file
-        if [[ $file == sc*prod*.tar* ]]; then
-          tar xvf $file -C app/${project}/${SCRIPTCASE_PROD_LIB}
+        if [[ $file == *"sc_prod"*".tar" ]]; then
+          tar xvf $file -C app/${project}/${SCRIPTCASE_PRODLIB}
           echo "Publishing scriptcase Prod environment from: $file"
           echo "Please goto ${project}.domain.com/_lib/prod to check/configure database connection "
           mv $file app_install/${project}/history 
-          update_rights "app/project${no}/${SCRIPTCASE_PROD_LIB}"
+          cp app/project${no}/${SCRIPTCASE_PRODLIB}/${SCRIPTCASE_WKHTMLTOPDF_SCRIPT} app/project${no}/${SCRIPTCASE_PRODLIB}/${SCRIPTCASE_WKHTMLTOPDF_SCRIPT}.org 
+          update_rights "app/project${no}/${SCRIPTCASE_PRODLIB}" 
+          find  app/project${no}/${SCRIPTCASE_PRODLIB}/prod/third -type f  \( -exec sh -c 'file -b "$1" | grep -q executable' Test {} \; -exec chmod 755 {} \; \)
         fi
         if [[ $file == *.tar.gz ]]; then
           tar xvfz $file -C app/${project}
           echo "Publishing scriptcase php files from:" $file
           # Special change for start application (app_Login) as it seems redirect is not to working with nginx-proxy
           # Maybe myapp_projectx.conf changes can overcome this but is not found yet 
-          rm app/project${no}/_lib/friendly_url/${SCRIPTCASE_STARTAPP}_ini.txt
+          rm -f app/project${no}/_lib/friendly_url/${SCRIPTCASE_STARTAPP}_ini.txt
           mv $file app_install/${project}/history 
-          update_rights "app/project${no}"
+          update_rights "app/project${no}" -x "${SCRIPTCASE_PRODLIB}/prod/*"
         fi
         if [[ $file == *.sql ]]; then
 	  # Execute sql file 
@@ -79,10 +106,12 @@ echo $file
   done
 }
 
-
-while true; do
-  inotifywait -e create -e moved_to $UPDATE_DIR
-  publish_app $UPDATEDIR
-  sleep $DEPLOY_INTERVAL_SEC
-done
-
+publish_app $UPDATE_DIR
+if [ "$2" == "-d" ]; then
+  while true; do
+    inotifywait -e create -e moved_to $UPDATE_DIR
+    echo "Publishing"
+    publish_app $UPDATE_DIR
+    sleep $DEPLOY_INTERVAL_SEC
+  done
+fi 

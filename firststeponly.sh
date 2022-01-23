@@ -55,21 +55,24 @@ echo $file
 done
 # S.T. : Special change for app_Login as it seems redirect is not to working with nginx-proxy
 # Maybe myapp_projectx.conf changes can overcome this but this is not found yet
-rm app/project${no}/${SCRIPTCASE_PRODLIB}/friendly_url/${SCRIPTCASE_STARTAPP}_ini.txt
+rm -f app/project${no}/${SCRIPTCASE_PRODLIB}/friendly_url/${SCRIPTCASE_STARTAPP}_ini.txt
 # Create .project.env file for wkhtmltpdf
 mkdir app/project${no}/pdf_ini
 chmod 755  app/project${no}/pdf_ini 2>/dev/null
 chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP}  app/project${no}/pdf_ini 2>/dev/null
-echo "wkhtmltopdf_server=\/${CONTAINER_WKHTMLTOPDF_NAME}" > app/project${no}/pdf_ini/.project.env
-echo "wkhtmltopdf_port=\/${CONTAINER_WKHTMLTOPDF_PORT}" >> app/project${no}/pdf_ini/.project.env
+echo "wkhtmltopdf_server=${CONTAINER_WKHTMLTOPDF_NAME}" > app/project${no}/pdf_ini/.project.env
+echo "wkhtmltopdf_port=${CONTAINER_WKHTMLTOPDF_PORT}" >> app/project${no}/pdf_ini/.project.env
+echo "wkhtmltopdf_exec_time=${SCRIPTCASE_WKHTMLTOPDF_EXEC_TIME}" >> app/project${no}/pdf_ini/.project.env
  
+IFS='
+' # split on newline only
 for xd in `find ./app/project${no} -type f`; do
-  chmod 644 $xd 2>/dev/null
-  chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP} $xd 2>/dev/null
+  chmod 644 "$xd" 
+  chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP} "$xd"
 done
 for xd in `find ./app/project${no} -type d`; do
-  chmod 755 $xd 2>/dev/null
-  chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP} $xd 2>/dev/null
+  chmod 755 "$xd"
+  chown ${BITNAMI_PHP_USER}:${BITNAMI_PHP_GROUP} "$xd"
 done
 # Ensure all binaries and shell scripts in app/_lib/prod are executable
 find  app/project${no}/${SCRIPTCASE_PRODLIB}/prod/third -type f  \( -exec sh -c 'file -b "$1" | grep -q executable' Test {} \; -exec chmod 755 {} \; \)
@@ -96,7 +99,7 @@ if [ "$no" == "1" ]; then
       mv $file ${dir}/history 
     fi
   done
-else
+else # $no != 1
   # Startup containers 
   echo "Executing docker-compose -f dc_project${no} up -d"
   docker-compose -f dc_project${no}.yml --env-file .env${no} build

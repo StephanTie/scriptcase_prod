@@ -28,11 +28,12 @@ fi
 
 
 
-if [ -f ${wkpdfinidir}/\.project.env ]; then
-  source ${wkpdfinidir}/\.project.env
+if [ -f ${wkpdfinidir}/.project.env ]; then
+  source ${wkpdfinidir}/.project.env
 else  
   wkhtmltopdf_server="wkhtmltopdf1"
   wkhtmltopdf_port=4000
+  wkhtmltopdf_exec_time=2
 fi
 
 data=""
@@ -41,7 +42,7 @@ if [ -f "${wkpdfinifile}" ]; then
   # file found
   for word in $(<$wkpdfinifile);
   do
-     data=$(printf '%s"%s"' "$data",  "${word}");
+     data=$(printf '%s"%s"' "$data",  "${word//[$'\t\r\n']}");
   done
 else
   # file not found
@@ -64,6 +65,6 @@ echo $data >> wk.debugfile
 echo "Execute curl -v -X POST -H 'Content-Type: application/json' -d '$data' http://${wkhtmltopdf_server}:${wkhtmltopdf_port}/commands/wkhtmltopdf?wait=true&force_unique_key=true" >> wk.debugfile 
 echo "Execute curl -v -X POST -H 'Content-Type: application/json' -d '$data' http://${wkhtmltopdf_server}:${wkhtmltopdf_port}/commands/wkhtmltopdf?wait=true&force_unique_key=true" >> $debugfile 
 
-bash -c "curl -v POST -H 'Content-Type: application/json' -d '$data' http://${wkhtmltopdf_server}:${wkhtmltopdf_port}/commands/wkhtmltopdf?wait=true&force_unique_key=true" 2>> $debugfile >> $debugfile
-sleep 2
+bash -c "curl -v -X POST -H 'Content-Type: application/json' -d '$data' http://${wkhtmltopdf_server}:${wkhtmltopdf_port}/commands/wkhtmltopdf?wait=true&force_unique_key=true" 2>> $debugfile >> $debugfile
+sleep $wkhtmltopdf_exec_time
 exit 0
