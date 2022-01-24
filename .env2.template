@@ -200,6 +200,8 @@ PUREFTPD_DATA_DIR=../pure-ftpd/data
 SCRIPTCASE_PRODLIB=_lib
 # wkhtmltopdf shell scripts location (dir + file) without SCRIPTCASE_PRODLIB and /
 SCRIPTCASE_WKHTMLTOPDF_SCRIPT=prod/third/wkhtmltopdf/linux-amd64/wkhtmltopdf-amd64
+# wkhtmltopdf execute time
+SCRIPTCASE_WKHTMLTOPDF_EXEC_TIME=2
 # Startup scriptcase application
 SCRIPTCASE_STARTAPP=app_Login
 # deploy check interval
