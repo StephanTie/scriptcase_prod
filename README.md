@@ -90,7 +90,7 @@ screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh 1:  Checks if files are p
 screen -dmS PUBLISH_SCRIPTCASE ./publish_scriptcase.sh 2:  Checks if files are placed in app_install/project2 or ../pure-ftpd/data/scriptcase/project2 dir
 
 Checking if wkhtmltopdf works:
-curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["Hello","Letter","--orientation","Portrait","--header-right","[page]", http://wkhtmltopdf-project2:4000/commands/hello?wait=true&force_unique_key=true   and curl -v -H http://wkhtmltopdf-project2:4000/commands/wkhtmltopdf?key=<fill in key received>    
+curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["Hello","Letter","--orientation","Portrait","--header-right","[page]", http://wkhtmltopdf1:4000/commands/hello?wait=true&force_unique_key=true   and curl -v -H http://wkhtmltopdf1:4000/commands/hello?key=<fill in key received>    
 
 curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["--page-size","Letter","--orientation","Portrait","--header-right","[page]","/app/_lib/tmp/sc_grid_customers_html_srohjjdvj89f8r2148nm22damc.html","/app/_lib/tmp/sc_pdf_06a6822b6a707fe23a99808a1df15641_grid_customers.pdf"]}' http://wkhtmltopdf-project2:4000/commands/wkhtmltopdf?wait=true&force_unique_key=true   
     
