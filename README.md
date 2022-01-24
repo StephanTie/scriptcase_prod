@@ -95,18 +95,22 @@ curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["Hello","Letter
 curl -v -X POST -H 'Content-Type: application/json' -d '{"args":["--page-size","Letter","--orientation","Portrait","--header-right","[page]","/app/_lib/tmp/sc_grid_customers_html_srohjjdvj89f8r2148nm22damc.html","/app/_lib/tmp/sc_pdf_06a6822b6a707fe23a99808a1df15641_grid_customers.pdf"]}' http://wkhtmltopdf-project2:4000/commands/wkhtmltopdf?wait=true&force_unique_key=true   
     
 Projectstructure:
+   
+```sh
 ── app
 │   ├── project1
 │   │   ├── grid_customers
-│   │   ├── history
+│   │   ├── grid_<others>    
 │   │   ├── _lib
 │   │   │   └── tmp
+│   │   │   └── prod
 │   │   └── pdf_ini
 │   └── project2
 │       ├── grid_customers
-│       ├── history
+│       ├── grid_<others>    
 │       ├── _lib
 │       │   └── tmp
+│       │   └── prod
 │       └── pdf_ini
 ├── app_install
 │   ├── project1
@@ -122,10 +126,6 @@ Projectstructure:
 │   ├── Flask-Shell2HTTP
 │   │   ├── conf
 │   │   ├── docs
-│   │   │   └── source
-│   │   ├── examples
-│   │   ├── flask_shell2http
-│   │   └── tests
 │   ├── project1
 │   └── project2
 ├── mysql_conf
@@ -149,7 +149,10 @@ Projectstructure:
 │       └── phpext
 └── pma_conf
     └── sessions
-
- **   Special Thanks to:**
-    Eshaan Bansal for his contribution on github eshaan7/Flask-Shell2HTTP
-    To many others who share their knowledge on github and stackoverflow 
+```
+##   Special Thanks to the opensource projects from
+- Eshaan Bansal for his contribution on github eshaan7/Flask-Shell2HTTP
+- jwilder/nginx-proxy 
+- jrcs/letsencrypt-nginx-proxy-companion
+- surnet/wkhtmltopdf   
+- To many others who share their knowledge on github and stackoverflow 
