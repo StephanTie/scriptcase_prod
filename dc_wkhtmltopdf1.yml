@@ -1,0 +1,29 @@
+version: '3'
+services:
+  wkhtmltopdf2:
+    container_name: ${CONTAINER_WKHTMLTOPDF_NAME:-wkhtmltopdf}
+    build:
+      context:  ${WKHTMLTOPDF_DOCKERFILESDIR}
+      dockerfile: ./Dockerfile1
+      args:
+        IMAGE: ${WKHTMLTOPDF_IMAGE}
+        TAG: ${WKHTMLTOPDF_IMAGE_VERSION}
+        PORT: ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT}
+    restart: "unless-stopped"
+    hostname: "wkhtmltopdf1"
+    ports:
+      - ${CONTAINER_WKHTMLTOPDF_PORT:-4000}:${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4000}
+    expose:
+      - ${CONTAINER_WKHTMLTOPDF_INTERNAL_PORT:-4000}
+    volumes:
+      - ${PHP_APP_PROJECT_DIR}:${BITNAMI_PHP_APP_DIR}
+      - /usr/share/zoneinfo/Europe/Amsterdam:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      proxy:
+        ipv4_address: ${CONTAINER_WKHTMLTOPDF_IPV4}
+networks:
+  proxy:
+    external:
+      name: ${NETWORK}
+

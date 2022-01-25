@@ -11,6 +11,8 @@ COMPOSE_PROJECT_NAME=project2
 # The container app must use a network connected to webproxy
 #
 NETWORK=webproxy
+SUBNET=172.20.0.0/28
+GATEWAY=172.20.0.1
 
 ###################################################################
 # Database Container options                                      #

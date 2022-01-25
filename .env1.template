@@ -11,6 +11,8 @@ COMPOSE_PROJECT_NAME=project1
 # The container app must use a network connected to webproxy
 #
 NETWORK=webproxy
+SUBNET=172.20.0.0/28
+GATEWAY=172.20.0.1
 
 ###################################################################
 # Database Container options                                      #
@@ -204,3 +206,6 @@ SCRIPTCASE_WKHTMLTOPDF_EXEC_TIME=2
 SCRIPTCASE_STARTAPP=app_Login
 # deploy check interval
 DEPLOY_INTERVAL_SEC=10
+
+
+
