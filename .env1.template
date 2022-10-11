@@ -115,9 +115,11 @@ PHP_PROJECT_DOCKERFILE=./dockerfiles/project1/Dockerfile-php-fpm
 PHP_PROJECT_IMAGE=bitnami/php-fpm
 # PHP Site Version
 #PHP_PROJECT_IMAGE_VERSION=7.0.14-r1 #old version
-PHP_PROJECT_IMAGE_VERSION=7.3.12-r21
+#PHP_PROJECT_IMAGE_VERSION=7.3.12-r21
+PHP_PROJECT_IMAGE_VERSION=8.1.6
 # php project1 version 
-PHP_PROJECT_VERSION=7.3
+#PHP_PROJECT_VERSION=7.3
+PHP_PROJECT_VERSION=8.1
 
 
 # Configuration files php on bitnami
@@ -180,7 +182,7 @@ WKHTMLTOPDF_IMAGE_VERSION=3.9.9-0.12.6-full
 # wkhtmltopdf container name
 CONTAINER_WKHTMLTOPDF_NAME=wkhtmltopdf1
 # wkhtmltopdf container ipv4 address
-CONTAINER_WKHTMLTOPDF_IPV4=172.20.0.3
+CONTAINER_WKHTMLTOPDF_IPV4=172.20.0.9
 CONTAINER_WKHTMLTOPDF_PORT=4000
 CONTAINER_WKHTMLTOPDF_INTERNAL_PORT=4000
 
@@ -194,6 +196,13 @@ LETSENCRYPT_EMAIL=admin@<domain.com>
 # pure ftpd dir where updates are placed
 PUREFTPD_DIR=../pure-ftpd
 PUREFTPD_DATA_DIR=../pure-ftpd/data
+
+###################################################################
+# SCRIPTCASE settings
+###################################################################
+# Scriptcase version
+#SCRIPTCASE_VERSION=9.7.009
+SCRIPTCASE_VERSION=9.8.009
 
 
 # location of scriptcase libraries and production environment

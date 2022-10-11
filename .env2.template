@@ -1,4 +1,4 @@
-# .env file to set up my PROJECT scriptcase environment
+# .env file to set up my PROJECT 2 scriptcase environment
 
 #
 # Compose default project env variables
@@ -115,9 +115,11 @@ PHP_PROJECT_DOCKERFILE=./dockerfiles/project2/Dockerfile-php-fpm
 PHP_PROJECT_IMAGE=bitnami/php-fpm
 # PHP Site Version
 #PHP_PROJECT_IMAGE_VERSION=7.0.14-r1 #old version
-PHP_PROJECT_IMAGE_VERSION=7.3.12-r21
+#PHP_PROJECT_IMAGE_VERSION=7.3.12-r21
+PHP_PROJECT_IMAGE_VERSION=8.1.6
 # php project2 version 
-PHP_PROJECT_VERSION=7.3
+#PHP_PROJECT_VERSION=7.3
+PHP_PROJECT_VERSION=8.1
 
 
 # Configuration files php on bitnami
@@ -197,6 +199,13 @@ LETSENCRYPT_EMAIL=admin@<domain.com>
 PUREFTPD_DIR=../pure-ftpd
 PUREFTPD_DATA_DIR=../pure-ftpd/data
 
+
+###################################################################
+# SCRIPTCASE settings
+###################################################################
+# Scriptcase version
+#SCRIPTCASE_VERSION=9.7.009
+SCRIPTCASE_VERSION=9.8.009
 
 # location of scriptcase libraries and production environment
 SCRIPTCASE_PRODLIB=_lib
