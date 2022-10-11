@@ -220,6 +220,6 @@ Projectstructure:
 ##   Special Thanks to the opensource projects from
 - Eshaan Bansal for his contribution on github eshaan7/Flask-Shell2HTTP
 - jwilder/nginx-proxy 
-- jrcs/letsencrypt-nginx-proxy-companion
 - surnet/wkhtmltopdf   
+- evertramos/nginxproxy-acme-companion
 - To many others who share their knowledge on github and stackoverflow 
