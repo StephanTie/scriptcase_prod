@@ -4,6 +4,8 @@
 
 
 ## Features
+- Added support for the newest version of scriptcase 9.8.009 and php version 8.1.6
+(Also can be set for older versions of scriptcase and php)
 - Install Scriptcase generated php applications on docker with docker-compose
 - Using nginx-proxy, jcrs letsencrypte, nginx, mysql, phpmyadmin with ssl access
 - Additional solved the portability issue with wkhtmltopdf by generating a container for it where settings can be altered per report   
@@ -47,8 +49,12 @@ sudo vi /etc/docker/daemon.json
 sudo systemctl start docker
 ```
 
-2. Required is to start up nginx-proxy and letsencrypt-nginx-proxy-companion
-Follow the steps defined in  https://github.com/StephanTie/nginx-proxy-letsencrypt
+2. Required is to start up nginx-proxy and nginxproxy-acme-companion developed by Evert Ramos
+- Ensure the right certificates on your server
+```sh
+sudo apt-get update && sudo apt-get install ca-certificates
+```
+- Follow then the steps defined in  https://github.com/evertramos/nginx-proxy-automation
 
 3. Ensure you have an A record pointing to your server in your DNS
 project1.domain.com -> 111.222.333.444
